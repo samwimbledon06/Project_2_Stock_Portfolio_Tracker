@@ -18,9 +18,41 @@ def convert_valid_input_to_float(user_input):
 
     return float_value
 
+def validate_ticker_input(user_input): # This function is used to validate the ticker symbol input by the user.
+    if not isinstance(user_input, str) or user_input.strip() == "": # Checks if the input is empty or just whitespace and the input is not a string, which is not valid for a ticker symbol
+        return None # Return None to indicate that the input was invalid.
 
+    user_input = user_input.strip() # This removes any whitespace from the beginning and end of the string. This is done to standardize the input and make it easier to compare with other ticker symbols.  
+
+    letter_count = 0 # This initializes a variable to count the number of letters in the input string. This is done to check if the there is at least one letter for a ticker symbol.
+    for char in user_input: # This loops through each character in the input string and checks if it is a valid character for a ticker symbol. Ticker symbols can only contain letters, hyphens, and dots. If any character is not valid, the function returns None to indicate that the input was invalid.
+        if not char.isalpha() and char not in (".", "-"): # Checks if the character is not a letter and not a dot or hyphen, which is not valid for a ticker symbol
+            return None # Return None to indicate that the input was invalid.
+
+        if char.isalpha(): # Checks if the character is a letter, which is valid for a ticker symbol
+            letter_count += 1 # This increments the letter count by 1 for each letter in the input string. This is done to check that the input should have at least one letter.
+        
+
+    if letter_count == 0: # Checks if the letter count is zero, which means the input was just a dot or hyphen and not a valid ticker symbol
+        return None # Return None to indicate that the input was invalid.
+    
+    if len(user_input) > 7: # Checks if the length of the input is greater than 7, which is not valid for a ticker symbol
+        return None # Return None to indicate that the input was invalid.
+
+    user_input = user_input.upper() # This converts the input to uppercase. This is done to standardize the input and make it easier to compare with other ticker symbols.
+
+    return user_input # Return the validated and standardized ticker symbol input.
+
+validate_ticker_input(None)
 # Testing different inputs for convert_valid_input_to_float function
 if __name__ == "__main__":
     test_inputs = ["12.50", "abc", "", "-5", "nan", "inf", "0", "0.0", "-inf"]
     for input_value in test_inputs:
-        print(convert_valid_input_to_float(input_value)) # Print the result of convert_valid_input_to_float for each test inputs
+        print(convert_valid_input_to_float(input_value)) # Print the result of convert_valid_input_to_float for each test inputs.
+
+    test_inputs_str = ["AAPL", "aapl", " aapl ", "GOOGL", "BRK.B", "", "123", "A B", None, 123, ".", "-", "A.B.C", "GOOGL.L", "TOOLONG1"]
+    for input_value in test_inputs_str:
+        print(validate_ticker_input(input_value)) # Print the result of validate_ticker_input for each test inputs.
+
+    
+    
