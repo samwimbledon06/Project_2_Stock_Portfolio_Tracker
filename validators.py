@@ -2,6 +2,9 @@
 
 # Validating user input for the value they input e.g. price or quantity. This function checks if the input is a valid float and returns None if it is not valid. It also checks if the input is a positive number and returns None if it is not.
 import math # Importing the math module to use the isfinite function for checking if the value is finite
+from datetime import datetime # Importing the datetime module to use the strptime function for checking if the date is valid
+
+MAX_YEARS_BACK = 100 # This is a constant that defines the maximum number of years back that a date can be. This is used to check if the date input is valid.
 
 def convert_valid_input_to_float(user_input):
     try:
@@ -43,6 +46,27 @@ def validate_ticker_input(user_input): # This function is used to validate the t
 
     return user_input # Return the validated and standardized ticker symbol input.
 
+def validate_date_input(user_input): # This function is used to validate the date input by the user.
+    if not isinstance(user_input, str): # Checks if the user input is not a string, which is not valid for date input
+        return None # Return None which indicates that the date is not valid
+
+    user_input = user_input.strip() # This removes any whitespace from the beginning and end of the string. This is done to standardize the input and make it easier to compare with other date inputs.
+
+    if user_input == "": # Checks if the input is empty or just whitespace, which is not valid for a date input
+        return None # Return None to indicate that the input was invalid.
+    
+    try:
+        date_value = datetime.strptime(user_input, "%Y-%m-%d") # This converts the string that is automatically parsed from the input into a datetime object. The format is specified as "%Y-%m-%d" which means the date should be in the format of "YYYY-MM-DD".
+    
+    except ValueError: # If the conversion to datetime fails, it means the input was not a valid date format
+        return None # Return None to indicate that the input was invalid.
+
+    if date_value > datetime.now() or date_value.year < datetime.now().year - MAX_YEARS_BACK: # Checks if the date is in the future or more than of the 1st of the year from 100 years in the past, which is not valid for a date input
+        return None # Return None to indicate that the input was invalid.
+
+    string_date = datetime.strftime(date_value, "%Y-%m-%d") # This converts the datetime object back into a string in the format of "YYYY-MM-DD". This is done to standardize the input and make it easier to compare with other date inputs.
+    return string_date # Return the validated and standardized date input.
+
 validate_ticker_input(None)
 # Testing different inputs for convert_valid_input_to_float function
 if __name__ == "__main__":
@@ -53,6 +77,10 @@ if __name__ == "__main__":
     test_inputs_str = ["AAPL", "aapl", " aapl ", "GOOGL", "BRK.B", "", "123", "A B", None, 123, ".", "-", "A.B.C", "GOOGL.L", "TOOLONG1"]
     for input_value in test_inputs_str:
         print(validate_ticker_input(input_value)) # Print the result of validate_ticker_input for each test inputs.
+
+    test_inputs_date = ["2026-10-08", "2026-13-45", "08/10/2026", "2026-02-30", "", None, "yesterday", "2026-1-5", "2026-12-31"]
+    for input_value in test_inputs_date:
+        print(validate_date_input(input_value)) # Print the result of validate_date_input for each test inputs.
 
     
     
