@@ -4,7 +4,7 @@
 import math # Importing the math module to use the isfinite function for checking if the value is finite
 from datetime import datetime # Importing the datetime module to use the strptime function for checking if the date is valid
 
-MAX_YEARS_BACK = 100 # This is a constant that defines the maximum number of years back that a date can be. This is used to check if the date input is valid.
+MAX_YEARS_BACK = 100 # This is a constant that defines the maximum number of years back that a date can be. This only checks the year part of the date. This is used to check if the date input is valid.
 
 def convert_valid_input_to_float(user_input):
     try:
@@ -83,4 +83,4 @@ if __name__ == "__main__":
         print(validate_date_input(input_value)) # Print the result of validate_date_input for each test inputs.
 
     
-    
+
